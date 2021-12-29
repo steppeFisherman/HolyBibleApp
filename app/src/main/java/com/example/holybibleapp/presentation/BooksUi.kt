@@ -11,7 +11,8 @@ sealed class BooksUi : Abstract.Object<Unit, Abstract.Mapper.Empty>() {
         private val communication: BooksCommunication,
         private val books: List<Book>
     ) : BooksUi() {
-        override fun map(mapper: Abstract.Mapper.Empty) = communication.show(books)
+        override fun map(mapper: Abstract.Mapper.Empty) =
+            communication.show(books)
     }
 
     class Fail(
