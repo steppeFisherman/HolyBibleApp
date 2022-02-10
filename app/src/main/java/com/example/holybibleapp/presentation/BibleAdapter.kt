@@ -8,7 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.holybibleapp.R
 
-class BibleAdapter(private val retry: Retry) : RecyclerView.Adapter<BibleAdapter.BibleViewHolder>() {
+class BibleAdapter(private val retry: Retry) :
+    RecyclerView.Adapter<BibleAdapter.BibleViewHolder>() {
 
     private val books = ArrayList<BookUi>()
 
@@ -18,17 +19,21 @@ class BibleAdapter(private val retry: Retry) : RecyclerView.Adapter<BibleAdapter
         notifyDataSetChanged()
     }
 
-    override fun getItemViewType(position: Int): Int = when (books[position]) {
+    override fun getItemViewType(position: Int) = when (books[position]) {
         is BookUi.Base -> 0
         is BookUi.Fail -> 1
-        is BookUi.Progress -> 2
+        is BookUi.Testament -> 2
+        is BookUi.Progress -> 3
+        else -> -1
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
         0 -> BibleViewHolder.Base(R.layout.book_layout.makeView(parent))
-        1 -> BibleViewHolder.Fail(R.layout.fail_fullscreen.makeView(parent), retry = retry)
-        else -> BibleViewHolder.FullScreenProgress(R.layout.progress_fullscreen.makeView(parent))
-
+        1 -> BibleViewHolder.Fail(R.layout.fail_fullscreen.makeView(parent), retry)
+        2 -> BibleViewHolder.Base(R.layout.testament.makeView(parent))
+        else ->
+            BibleViewHolder.FullScreenProgress(R.layout.progress_fullscreen.makeView(parent))
     }
 
     override fun onBindViewHolder(holder: BibleViewHolder, position: Int) =
@@ -37,8 +42,7 @@ class BibleAdapter(private val retry: Retry) : RecyclerView.Adapter<BibleAdapter
     override fun getItemCount() = books.size
 
     abstract class BibleViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        open fun bind(book: BookUi) {
-        }
+        open fun bind(book: BookUi) {}
 
         class FullScreenProgress(view: View) : BibleViewHolder(view)
 
